@@ -10,9 +10,6 @@ Tests for `pyzeef` module.
 
 import unittest
 
-from pyzeef import pyzeef
-
-
 class TestPyzeef(unittest.TestCase):
 
     def setUp(self):
