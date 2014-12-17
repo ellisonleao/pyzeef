@@ -101,15 +101,15 @@ class Page(Base):
             return blocks
         return super(Page, self).__getattr__(item)
 
-    def update_page(self, page_id, data):
+    def update(self, data):
         # TODO:
         pass
 
-    def delete_page(self, page_id):
+    def delete_page(self):
         # TODO:
         pass
 
-    def add_block(self, title):
+    def add_block(self, title, block_type='link'):
         # TODO:
         pass
 
@@ -125,12 +125,34 @@ class Block(Base):
         # special cases
         if item == 'type':
             return self.data['@type']
+        elif item == 'links':
+            # return a lists of Link instances
+            links = []
+            for link in self.data['links']:
+                links.append(Link(self.token, link))
+            return links
         return super(Block, self).__getattr__(item)
 
-    def update(self, block_id, data):
+    def update(self, data):
         # TODO:
         pass
 
-    def delete(self, block_id):
+    def delete(self):
+        # TODO:
+        pass
+
+
+class Link(Base):
+    """
+    Class to handle Link API requests
+    """
+    def __repr__(self):
+        return '<Link {}-{}>'.format(self.title or self.hostname, self.url)
+
+    def update(self, data):
+        # TODO:
+        pass
+
+    def delete(self):
         # TODO:
         pass
