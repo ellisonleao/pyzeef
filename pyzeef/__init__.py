@@ -5,8 +5,13 @@ __author__ = 'Ellison Leão'
 __email__ = 'ellisonleao@gmail.com'
 __version__ = '0.1.0'
 
+__all__ = ['Zeef']
+
 
 class Zeef(object):
+    """
+    Main ZEEF API Class
+    """
     API_URL = 'https://zeef.io/api'
 
     def __init__(self, token, **kwargs):
@@ -32,56 +37,100 @@ class Zeef(object):
                     page_detail = '{}/{}'.format(self.pages_url, page['id'])
                     r = requests.get(page_detail, headers=self.auth_header)
                     if r.status_code == 200:
-                        self.pages.append(r.json())
+                        self.pages.append(Page(self.token, r.json()))
             else:
                 self.pages = pages
         elif response.status_code in (400, 404):
             # TODO: show error messages
             pass
 
-    # PAGES
     def get_page(self, page_id):
         if not type(page_id) == int:
             raise TypeError('page_id should be an int')
 
-        # first try to get from self.pages, then if no pages is found
-        # try with the api
-        if not self.pages:
-            page = '{}/{}'.format(self.pages_url, page_id)
-            r = requests.get(page, headers=self.auth_header)
-            if r.status_code == 200:
-                return r.json()
-            else:
-                # TODO: Error handling!
-                pass
-        page_ids = [i['id'] for i in self.pages]
-        if page_id in page_ids:
-            return self.pages[page_ids.index(page_id)]
+        page = '{}/{}'.format(self.pages_url, page_id)
+        r = requests.get(page, headers=self.auth_header)
+        if r.status_code == 200:
+            return Page(self.token, r.json())
+        else:
+            # TODO: Error handling!
+            pass
+
+
+class Base(object):
+    def __init__(self, token, data):
+        self.token = token
+        self.data = data
+
+    def __repr__(self):
+        raise NotImplementedError(':)')
+
+    def __getitem__(self, item):
+        return self.__getattr__(item)
+
+    def __getattr__(self, item):
+        if item in self.data:
+            return self.data[item]
+        raise AttributeError('{} does not contains the {} '
+                             'attribute'.format(self.__class__, item))
+
+
+class Page(Base):
+    """
+    Class to handle Page API requests
+    """
+    def __repr__(self):
+        return '<Page {}>'.format(self.title)
+
+    def __getattr__(self, item):
+        # special cases
+        if item == 'title':
+            # get the default alias
+            subject = self.data['subject']['alias']
+            for i in subject:
+                if i['defaultAlias']:
+                    return i['displayName']
+
+        if item == 'owner':
+            return self.data['owner']['fullName']
+        if item == 'blocks':
+            # create the lists of blocks objects
+            blocks = []
+            for block in self.data['blocks']:
+                blocks.append(Block(self.token, block))
+            return blocks
+        return super(Page, self).__getattr__(item)
 
     def update_page(self, page_id, data):
+        # TODO:
         pass
 
     def delete_page(self, page_id):
+        # TODO:
         pass
 
-    # BLOCKS
-    def get_block(self, block_id):
-        block_url = '{}/block/{}'.format(self.API_URL, block_id)
-        response = requests.get(block_url)
-        if response.status_code == 200:
-            return response.json()
-        elif response.status_code == 204:
-            # TODO: show no content message
-            pass
-        elif response.status_code == 400:
-            # TODO: show wrong request message
-            pass
-        # TODO: Better error message handling
-        return {'error': 'Not Found'}
+    def add_block(self, title):
+        # TODO:
+        pass
 
-    def update_block(self, block_id):
-        block = self.get_block(block_id)
-        return block
 
-    def delete_block(self, block_id):
+class Block(Base):
+    """
+    Class to handle Block API requests
+    """
+    def __repr__(self):
+        return '<Block {}>'.format(self.title)
+
+    def __getattr__(self, item):
+        # special cases
+        if item == 'type':
+            return self.data['@type']
+        return super(Block, self).__getattr__(item)
+
+    def update(self, block_id, data):
+        # TODO:
+        pass
+
+    def delete(self, block_id):
+        # TODO:
         pass
