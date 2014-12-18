@@ -48,10 +48,22 @@ class Zeef(object):
         if not type(page_id) == int:
             raise TypeError('page_id should be an int')
 
-        page = '{}/{}'.format(self.pages_url, page_id)
+        page = '{}/{}'.format(Page.PAGE_URL, page_id)
         r = requests.get(page, headers=self.auth_header)
         if r.status_code == 200:
             return Page(self.token, r.json())
+        else:
+            # TODO: Error handling!
+            pass
+
+    def get_block(self, block_id):
+        if not type(block_id) == int:
+            raise TypeError('page_id should be an int')
+
+        block = '{}/{}'.format(Block.BLOCK_URL, block_id)
+        r = requests.get(block, headers=self.auth_header)
+        if r.status_code == 200:
+            return Block(self.token, r.json())
         else:
             # TODO: Error handling!
             pass
@@ -61,6 +73,7 @@ class Base(object):
     def __init__(self, token, data):
         self.token = token
         self.data = data
+        self.auth_header = {'Authorization': 'OmniLogin auth={}'.format(token)}
 
     def __repr__(self):
         raise NotImplementedError(':)')
@@ -74,11 +87,21 @@ class Base(object):
         raise AttributeError('{} does not contains the {} '
                              'attribute'.format(self.__class__, item))
 
+    def _response(self, response):
+        try:
+            content = response.json()
+        except ValueError:
+            content = response.content
+
+        return {'status': response.status_code, 'content': content}
+
 
 class Page(Base):
     """
     Class to handle Page API requests
     """
+    PAGE_URL = '{}/page'.format(Zeef.API_URL)
+
     def __repr__(self):
         return '<Page {}>'.format(self.title)
 
@@ -105,11 +128,7 @@ class Page(Base):
         # TODO:
         pass
 
-    def delete_page(self):
-        # TODO:
-        pass
-
-    def add_block(self, title, block_type='link'):
+    def delete(self):
         # TODO:
         pass
 
@@ -118,13 +137,16 @@ class Block(Base):
     """
     Class to handle Block API requests
     """
+    BLOCK_URL = '{}/block'.format(Zeef.API_URL)
+
     def __repr__(self):
         return '<Block {}>'.format(self.title)
 
     def __getattr__(self, item):
         # special cases
         if item == 'type':
-            return self.data['@type']
+            t = self.data['@type']
+            return t[0:t.find('Block')]
         elif item == 'links':
             # return a lists of Link instances
             links = []
@@ -134,25 +156,64 @@ class Block(Base):
         return super(Block, self).__getattr__(item)
 
     def update(self, data):
-        # TODO:
-        pass
+        params = {}
+        keys = ['title', 'promoted', 'publicly_visible']
+        for key in keys:
+            if data.get(key, False):
+                params[key] = data[key]
+
+        if self.type == 'text' and data.get('markdown_text', False):
+            params['markdownText'] = data['markdown_text']
+
+        if self.type == 'link' and data.get('markdown_description', False):
+            params['markdownDescription'] = data['markdown_description']
+
+        url = '{}/{}'.format(self.BLOCK_URL, self.id)
+        response = requests.post(url, data=data, headers=self.auth_header)
+        if response.status_code == 200:
+            for key, val in params.iteritems():
+                setattr(self, key, val)
+
+        return self._response(response)
 
     def delete(self):
-        # TODO:
-        pass
+        url = '{}/{}'.format(self.BLOCK_URL, self.id)
+        response = requests.delete(url, headers=self.auth_header)
+        return self._response(response)
 
 
 class Link(Base):
     """
     Class to handle Link API requests
     """
+    LINK_URL = '{}/link'.format(Zeef.API_URL)
+
     def __repr__(self):
         return '<Link {}-{}>'.format(self.title or self.hostname, self.url)
 
     def update(self, data):
-        # TODO:
-        pass
+        url = data.get('url', False)
+        title = data.get('title', False)
+        description = data.get('description', False)
+
+        params = {}
+        if url:
+            params['url'] = url
+
+        if title:
+            params['title'] = title
+
+        if description:
+            params['description'] = description
+
+        url = '{}/{}'.format(self.LINK_URL, self.id)
+        response = requests.post(url, data=data, headers=self.auth_header)
+        if response.status_code == 200:
+            for key, val in response.json().iteritems():
+                setattr(self, key, val)
+        return self._response(response)
 
     def delete(self):
-        # TODO:
-        pass
+        url = '{}/{}'.format(self.LINK_URL, self.id)
+        response = requests.delete(url, headers=self.auth_header)
+        return self._response(response)
