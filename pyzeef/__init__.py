@@ -68,6 +68,9 @@ class Zeef(object):
             # TODO: Error handling!
             pass
 
+    def to_markdown(self):
+        # TODO:
+        pass
 
 class Base(object):
     def __init__(self, token, data):
