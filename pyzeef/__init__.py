@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+from StringIO import StringIO
+
+from mako.template import Template
+from mako.runtime import Context
 import requests
+
+
 
 __author__ = 'Ellison Leão'
 __email__ = 'ellisonleao@gmail.com'
@@ -38,8 +44,6 @@ class Zeef(object):
                     r = requests.get(page_detail, headers=self.auth_header)
                     if r.status_code == 200:
                         self.pages.append(Page(self.token, r.json()))
-            else:
-                self.pages = pages
         elif response.status_code in (400, 404):
             # TODO: show error messages
             pass
@@ -68,9 +72,6 @@ class Zeef(object):
             # TODO: Error handling!
             pass
 
-    def to_markdown(self):
-        # TODO:
-        pass
 
 class Base(object):
     def __init__(self, token, data):
@@ -135,6 +136,14 @@ class Page(Base):
         # TODO:
         pass
 
+    def to_markdown(self):
+        template = Template(filename='pyzeef/markdown_template.md')
+        buf = StringIO()
+        context_dict = {'page': self}
+        context = Context(buf, **context_dict)
+        template.render_context(context)
+        print buf.getvalue()
+
 
 class Block(Base):
     """
@@ -153,9 +162,18 @@ class Block(Base):
         elif item == 'links':
             # return a lists of Link instances
             links = []
-            for link in self.data['links']:
-                links.append(Link(self.token, link))
+            if self.type in ['link', 'feed', 'latestPages']:
+                for link in self.data['links']:
+                    links.append(Link(self.token, link))
+            elif self.type == 'image':
+                return self.data['imageUrl']
+            elif self.type == 'text':
+                return self.data['htmlText']
             return links
+        elif item == 'description':
+            if self.type in ['link', 'feed']:
+                return self.data['markdownDescription']
+            return ''
         return super(Block, self).__getattr__(item)
 
     def update(self, data):
@@ -192,7 +210,7 @@ class Link(Base):
     LINK_URL = '{}/link'.format(Zeef.API_URL)
 
     def __repr__(self):
-        return '<Link {}-{}>'.format(self.title or self.hostname, self.url)
+        return u'<Link {}>'.format(self.url)
 
     def update(self, data):
         url = data.get('url', False)

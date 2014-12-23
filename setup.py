@@ -12,7 +12,8 @@ readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 requirements = [
-    'requests'
+    'requests',
+    'Mako'
 ]
 
 test_requirements = [
