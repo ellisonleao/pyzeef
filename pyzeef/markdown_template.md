@@ -12,14 +12,12 @@
 ${ page.title }
 ${ '=' * len(page.title) }
 
-<!--- Table of Contents --->
 % for block in page.blocks:
 % if block.type in ['link', 'feed']:
 - [${ block.title }](#${block.title | slugify})
 % endif
 % endfor
 
-<!--- Links --->
 % for block in page.blocks:
 % if block.type in ['link', 'feed']:
 ${block.title}
@@ -28,7 +26,8 @@ ${'-' * len(block.title)}
 **${block.description}**
 % endif
 % for link in block.links:
-- [${link.title}](${link.url}) - ${link.description or link.url}
+- [${link.title or 'Link {}'.format(loop.index)}](${link.url}) - ${link.description or link.url}
 % endfor
+
 % endif
 % endfor
