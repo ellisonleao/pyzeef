@@ -1,0 +1,51 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import argparse
+
+from pyzeef import Zeef, __version__
+
+
+def get_parser():
+    parser = argparse.ArgumentParser(description='ZEEF API Command line')
+    parser.add_argument('-t', '--token', help='API Token', action='store')
+    parser.add_argument('--pages', help='My ZEEF Pages', action='store_true')
+    parser.add_argument('-p', type=int, help='ZEEF Page argument')
+    parser.add_argument('--markdown', action='store_true',
+                        help='Export ZEEF Page to MD format. -p arg required')
+    parser.add_argument('-v', '--version', help='displays the current version'
+                        ' of pyzeef', action='store_true')
+    return parser
+
+
+def command_line():
+    parser = get_parser()
+    args = vars(parser.parse_args())
+    token = None
+
+    if args['version']:
+        print __version__
+        return
+
+    if args['token']:
+        token = args['token']
+
+    if args['pages']:
+        if not token:
+            return parser.print_help()
+        d = Zeef(token, persist_pages=True)
+        for page in d.pages:
+            print u'- {}'.format(page.title)
+
+    if args['markdown']:
+        if not token:
+            return parser.print_help()
+
+        page = args['p']
+        if not page:
+            return parser.print_help()
+        d = Zeef(token)
+        page = d.get_page(page)
+        print page.to_markdown()
+
+if __name__ == '__main__':
+    command_line()
