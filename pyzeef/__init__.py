@@ -5,8 +5,6 @@ from mako.template import Template
 from mako.runtime import Context
 import requests
 
-
-
 __author__ = 'Ellison Leão'
 __email__ = 'ellisonleao@gmail.com'
 __version__ = '0.1.0'
@@ -107,7 +105,7 @@ class Page(Base):
     PAGE_URL = '{}/page'.format(Zeef.API_URL)
 
     def __repr__(self):
-        return '<Page {}>'.format(self.title)
+        return '<Page {}>'.format(self.id)
 
     def __getattr__(self, item):
         # special cases
@@ -142,7 +140,7 @@ class Page(Base):
         context_dict = {'page': self}
         context = Context(buf, **context_dict)
         template.render_context(context)
-        print buf.getvalue()
+        return buf.getvalue()
 
 
 class Block(Base):
@@ -152,7 +150,7 @@ class Block(Base):
     BLOCK_URL = '{}/block'.format(Zeef.API_URL)
 
     def __repr__(self):
-        return '<Block {}>'.format(self.title)
+        return '<Block {}>'.format(self.id)
 
     def __getattr__(self, item):
         # special cases

@@ -29,6 +29,9 @@ setup(
     author='Ellison Leão',
     author_email='ellisonleao@gmail.com',
     url='https://github.com/ellisonleao/pyzeef',
+    scripts=[
+        'bin/zeef'
+    ],
     packages=[
         'pyzeef',
     ],

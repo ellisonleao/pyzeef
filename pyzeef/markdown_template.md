@@ -20,10 +20,8 @@ ${ '=' * len(page.title) }
 % endfor
 
 <!--- Links --->
-${page.blocks}
 % for block in page.blocks:
 % if block.type in ['link', 'feed']:
-
 ${block.title}
 ${'-' * len(block.title)}
 % if block.description:
