@@ -140,7 +140,7 @@ class Page(Base):
         context_dict = {'page': self}
         context = Context(buf, **context_dict)
         template.render_context(context)
-        return buf.getvalue()
+        return buf.getvalue().encode('utf-8')
 
 
 class Block(Base):

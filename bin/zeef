@@ -34,7 +34,7 @@ def command_line():
             return parser.print_help()
         d = Zeef(token, persist_pages=True)
         for page in d.pages:
-            print u'- {}'.format(page.title)
+            print u'- {} - {}'.format(page.title, page.id)
 
     if args['markdown']:
         if not token:
