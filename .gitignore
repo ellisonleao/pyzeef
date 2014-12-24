@@ -34,9 +34,5 @@ htmlcov
 .project
 .pydevproject
 
-# Complexity
-output/*.html
-output/*/index.html
-
-# Sphinx
-docs/_build
+# MD files
+*.md

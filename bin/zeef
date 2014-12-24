@@ -9,7 +9,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description='ZEEF API Command line')
     parser.add_argument('-t', '--token', help='API Token', action='store')
     parser.add_argument('--pages', help='My ZEEF Pages', action='store_true')
-    parser.add_argument('-p', type=int, help='ZEEF Page argument')
+    parser.add_argument('-p', type=int, help='ZEEF Page id argument')
     parser.add_argument('--markdown', action='store_true',
                         help='Export ZEEF Page to MD format. -p arg required')
     parser.add_argument('-v', '--version', help='displays the current version'
@@ -21,6 +21,7 @@ def command_line():
     parser = get_parser()
     args = vars(parser.parse_args())
     token = None
+    page = None
 
     if args['version']:
         print __version__
