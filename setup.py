@@ -19,6 +19,7 @@ requirements = [
 test_requirements = [
     'flake8',
     'coverage',
+    'responses',
 ]
 
 setup(
