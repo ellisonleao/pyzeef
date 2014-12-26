@@ -35,7 +35,6 @@ class Base(object):
             content = response.json()
         except ValueError:
             content = response.content
-
         return {'status': response.status_code, 'content': content}
 
 
@@ -71,8 +70,7 @@ class Zeef(Base):
                     r = requests.get(page_detail, headers=self.auth_header)
                     if r.status_code == 200:
                         self.pages.append(Page(self.token, data=r.json()))
-        elif response.status_code in (400, 404, 500):
-            return self._response(response)
+        return self._response(response)
 
     def get_page(self, page_id):
         if not type(page_id) == int:
