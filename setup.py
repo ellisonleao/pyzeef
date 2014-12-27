@@ -10,17 +10,13 @@ except ImportError:
 
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+test_requirements = open('requirements-test.txt').read().split()
 
 requirements = [
     'requests',
     'Mako'
 ]
 
-test_requirements = [
-    'flake8',
-    'coverage',
-    'responses',
-]
 
 setup(
     name='pyzeef',
