@@ -41,7 +41,7 @@ class TestZeef(unittest.TestCase):
         self.assertEqual(z.token, 'sometoken')
 
     @responses.activate
-    def _test_get_basic_page(self):
+    def test_get_basic_page(self):
         # /pages/mine mock
         pages_mine_body = ('{"pageOverviews":[{"id":1,"url":"https://test.'
                            'zeef.com/user","subjectName":"test page",'
@@ -56,7 +56,7 @@ class TestZeef(unittest.TestCase):
         # /page/id mock
         page_body = {
             'htmlDescription': u'Testing Description',
-            'id': 123,
+            'id': 1,
             'links': [],
             'markdownDescription': 'Testing Description',
             'owner': {'fullName': 'Test Owner', 'username': 'test.owner'},
@@ -89,13 +89,12 @@ class TestZeef(unittest.TestCase):
         page_body = json.dumps(page_body)
         url = '{}/{}'.format(self.pages_url, _id)
         responses.add(responses.GET, url=url, body=page_body, status=200)
-        print responses
 
         z = Zeef('GoodToken', persist_pages=True)
         self.assertEqual(len(z.pages), 1)
         self.assertEqual(z.pages[0].__class__, Page)
         self.assertEqual(z.pages[0].title, 'Test Page')
-        self.assertEqual(z.pages[0].description, 'Test Description')
+        self.assertEqual(z.pages[0].description, 'Testing Description')
 
 if __name__ == '__main__':
     unittest.main()

@@ -121,6 +121,10 @@ class Page(Base):
             for block in self.data['blocks']:
                 blocks.append(Block(self.token, data=block))
             return blocks
+        if item == 'description':
+            if 'markdownDescription' in self.data:
+                return self.data['markdownDescription']
+            return ''
         return super(Page, self).__getattr__(item)
 
     def update(self, data):
