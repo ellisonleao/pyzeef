@@ -163,7 +163,7 @@ class Block(Base):
             links = []
             if self.type in ['link', 'feed', 'latestPages']:
                 for link in self.data['links']:
-                    links.append(Link(self.token, link))
+                    links.append(Link(self.token, data=link))
             elif self.type == 'image':
                 return self.data['imageUrl']
             elif self.type == 'text':
