@@ -176,7 +176,7 @@ class Block(Base):
                 for link in self.data['links']:
                     links.append(Link(self.token, data=link))
             elif self.type == 'image':
-                return self.data['imageUrl']
+                return self.data['imageURL']
             elif self.type == 'text':
                 return self.data['htmlText']
             return links
