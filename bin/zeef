@@ -5,6 +5,17 @@ import argparse
 from pyzeef import Zeef, __version__
 
 
+def color_text(text, color):
+    COLORS = dict(
+        green=32,
+        yellow=33,
+        red=31,
+        magenta=35,
+    )
+    color_text = u"\033[{}m{}\033[0m"
+    return color_text.format(COLORS[color], text)
+
+
 def get_parser():
     parser = argparse.ArgumentParser(description='ZEEF API Command line')
     parser.add_argument('-t', '--token', help='API Token', action='store')
@@ -29,6 +40,21 @@ def command_line():
 
     if args['token']:
         token = args['token']
+
+    if args['p'] and not args['markdown']:
+        d = Zeef(token)
+        page = d.get_page(args['p'])
+        # show page summary
+        total_blocks = len(page.blocks)
+        total_links = sum([len(i.links) for i in page.blocks])
+        output = """
+        {} {}
+        {} {}
+        {} {}
+        """.format(color_text('TITLE - ', 'yellow'), page.title,
+                   color_text('TOTAL BLOCKS - ', 'yellow'), total_blocks,
+                   color_text('TOTAL LINKS - ', 'yellow'), total_links)
+        print output
 
     if args['pages']:
         if not token:
