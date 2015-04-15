@@ -20,7 +20,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description='ZEEF API Command line')
     parser.add_argument('-t', '--token', help='API Token', action='store')
     parser.add_argument('--pages', help='My ZEEF Pages', action='store_true')
-    parser.add_argument('-p', type=int, help='ZEEF Page id argument')
+    parser.add_argument('-p', type=int, help='ZEEF Page Summary')
     parser.add_argument('--markdown', action='store_true',
                         help='Export ZEEF Page to MD format. -p arg required')
     parser.add_argument('-v', '--version', help='displays the current version'
@@ -43,7 +43,7 @@ def command_line():
 
     if args['p'] and not args['markdown']:
         d = Zeef(token)
-        page = d.get_page(args['p'])
+        page = d.get_page(page_id=args['p'])
         # show page summary
         total_blocks = len(page.blocks)
         total_links = sum([len(i.links) for i in page.blocks])

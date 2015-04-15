@@ -72,12 +72,20 @@ class Zeef(Base):
                         self.pages.append(Page(self.token, data=r.json()))
         return self._response(response)
 
-    def get_page(self, page_id):
-        if not type(page_id) == int:
-            raise TypeError('page_id should be an int')
-
-        page = '{}/{}'.format(Page.PAGE_URL, page_id)
-        r = requests.get(page, headers=self.auth_header)
+    def get_page(self, **kwargs):
+        page_id = kwargs.get('page_id')
+        alias = kwargs.get('alias')
+        username = kwargs.get('username')
+        # validation
+        if not any([page_id, alias, username]):
+            raise TypeError('You should pass a page_id or an alias and '
+                            'username in order to get a page info')
+        if alias and username:
+            url = '{}/{}/{}'.format(Page.PAGE_URL, alias, username)
+        if page_id:
+            # get page by id takes precedence
+            url = '{}/{}'.format(Page.PAGE_URL, page_id)
+        r = requests.get(url, headers=self.auth_header)
         if r.status_code == 200:
             return Page(self.token, data=r.json())
         else:
