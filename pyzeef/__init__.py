@@ -94,6 +94,17 @@ class Zeef(Base):
         else:
             return self._response(r)
 
+    def get_link(self, link_id):
+        if not type(link_id) == int:
+            raise TypeError('link_id should be an int')
+
+        link_url = '{}/{}'.format(Link.LINK_URL, link_id)
+        r = requests.get(link_url, headers=self.auth_header)
+        if r.status_code == 200:
+            return Link(self.token, data=r.json())
+        else:
+            return self._response(r)
+
 
 class Page(Base):
     """
