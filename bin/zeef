@@ -71,7 +71,7 @@ def command_line():
         if not page:
             return parser.print_help()
         d = Zeef(token)
-        page = d.get_page(page)
+        page = d.get_page(page_id=page)
         print page.to_markdown()
 
 if __name__ == '__main__':
