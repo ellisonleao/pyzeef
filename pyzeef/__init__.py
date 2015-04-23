@@ -13,6 +13,8 @@ __all__ = ['Zeef']
 
 
 class Base(object):
+    API_URL = 'https://zeef.io/api'
+
     def __init__(self, token, **kwargs):
         self.token = token
         self.auth_header = {'Authorization': 'OmniLogin auth={}'.format(token)}
@@ -42,8 +44,6 @@ class Zeef(Base):
     """
     Main ZEEF API Class
     """
-    API_URL = 'https://zeef.io/api'
-
     def __getattr__(self, item):
         return object.__getattribute__(self, item)
 
@@ -78,6 +78,9 @@ class Zeef(Base):
                         self.pages.append(Page(self.token, data=r.json()))
         return self._response(response)
 
+    """
+    Quick Methods
+    """
     def get_page(self, **kwargs):
         page_id = kwargs.get('page_id')
         alias = kwargs.get('alias')
@@ -124,7 +127,7 @@ class Page(Base):
     """
     Class to handle Page API requests
     """
-    PAGE_URL = '{}/page'.format(Zeef.API_URL)
+    PAGE_URL = '{}/page'.format(Base.API_URL)
 
     def __repr__(self):
         return '<Page {}>'.format(self.id)
@@ -173,7 +176,7 @@ class Block(Base):
     """
     Class to handle Block API requests
     """
-    BLOCK_URL = '{}/block'.format(Zeef.API_URL)
+    BLOCK_URL = '{}/block'.format(Base.API_URL)
 
     def __repr__(self):
         return '<Block {}>'.format(self.id)
@@ -231,7 +234,7 @@ class Link(Base):
     """
     Class to handle Link API requests
     """
-    LINK_URL = '{}/link'.format(Zeef.API_URL)
+    LINK_URL = '{}/link'.format(Base.API_URL)
 
     def __repr__(self):
         return u'<Link {}>'.format(self.url)
