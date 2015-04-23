@@ -4,7 +4,7 @@ import unittest
 import json
 
 import responses
-from pyzeef import Zeef, Block, Page
+from pyzeef import Zeef, Block, Page, Scratchpad
 
 
 class TestZeef(unittest.TestCase):
@@ -13,6 +13,27 @@ class TestZeef(unittest.TestCase):
         self.auth_url = '{}/pages/mine'.format(Zeef.API_URL)
         self.pages_url = Page.PAGE_URL
         self.block_url = Block.BLOCK_URL
+
+    def _scratchpad_mock(self):
+        """
+        mock helper
+        """
+        # scratchpad response mock
+        body = """
+            {
+              "id": 0,
+              "owner": "APIUser",
+              "scratchPadLinks": [
+                {
+                  "id": 0,
+                  "scratchPadId": 0,
+                  "title": "string",
+                  "url": "string"
+                }
+              ]
+            }
+        """
+        responses.add(responses.GET, url=Scratchpad.SCRATCHPAD_URL, body=body)
 
     @responses.activate
     def test_zeef_authentication_good_token(self):
@@ -23,14 +44,16 @@ class TestZeef(unittest.TestCase):
                 '"}]}')
 
         responses.add(responses.GET, url=self.auth_url, status=200, body=body)
+        self._scratchpad_mock()
+
         zeef = Zeef('GoodToken')
         self.assertEqual(len(zeef.pages), 0)
 
     def test_zeef_authentication_bad_token(self):
         z = Zeef('badtoken')
         r = z.authorize(persist_pages=False)
-        response = {'status': 500, 'content': '<html><head><title>Error'
-                    '</title></head><body>Internal Server Error</body>'
+        response = {'status': 404, 'content': '<html><head><title>Error'
+                    '</title></head><body>Not Found</body>'
                     '</html>'}
         self.assertEqual(r, response)
 
@@ -42,6 +65,7 @@ class TestZeef(unittest.TestCase):
 
     @responses.activate
     def test_get_basic_page(self):
+        self._scratchpad_mock()
         # /pages/mine mock
         pages_mine_body = ('{"pageOverviews":[{"id":1,"url":"https://test.'
                            'zeef.com/user","subjectName":"test page",'
