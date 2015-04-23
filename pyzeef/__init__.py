@@ -53,6 +53,12 @@ class Zeef(Base):
         self.auth_url = '{}/pages/mine'.format(self.API_URL)
         self.pages_url = '{}/page'.format(self.API_URL)
         self.authorize(persist_pages=kwargs.get('persist_pages', False))
+        # fetch scratchpad
+        self.scratchpad = None
+        if kwargs.get('get_scratchpad', True):
+            response = requests.get(Scratchpad.SCRATCHPAD_URL, headers=self.auth_header)
+            if response.status_code == 200:
+                self.scratchpad = Scratchpad(self.token, data=response.json())
 
     def authorize(self, token=None, persist_pages=True):
         """
@@ -255,4 +261,35 @@ class Link(Base):
     def delete(self):
         url = '{}/{}'.format(self.LINK_URL, self.id)
         response = requests.delete(url, headers=self.auth_header)
+        return self._response(response)
+
+
+class Scratchpad(Base):
+    SCRATCHPAD_URL = '{}/scratchPad/mine/'.format(Base.API_URL)
+
+    def __repr__(self):
+        return u'<Scratchpad {}>'.format(self.id)
+
+    def __getattr__(self, item):
+        if item == 'links':
+            return self.data['scratchPadLinks']
+        return super(Scratchpad, self).__getattr__(item)
+
+    def add_link(self, url):
+        url = '{}/addLink'.format(self.SCRATCHPAD_URL)
+        response = requests.post(url, data={'url': url},
+                                 headers=self.auth_header)
+        if response.status_code == 200:
+            # update links array
+            data = response.json()
+            self.data['scratchPadLinks'] = data['scratchPadLinks']
+        return self._response(response)
+
+    def delete_link(self, link_id):
+        url = '{}/scratchPadLink/{}'.format(self.API_URL, link_id)
+        response = requests.delete(url, headers=self.auth_header)
+        if response.status_code == 204:
+            # remove link from array data
+            links = [i for i in self.links if i['id'] != int(link_id)]
+            self.data['scratchPadLinks'] = links
         return self._response(response)
