@@ -56,7 +56,8 @@ class Zeef(Base):
         # fetch scratchpad
         self.scratchpad = None
         if kwargs.get('get_scratchpad', True):
-            response = requests.get(Scratchpad.SCRATCHPAD_URL, headers=self.auth_header)
+            response = requests.get(Scratchpad.SCRATCHPAD_URL,
+                                    headers=self.auth_header)
             if response.status_code == 200:
                 self.scratchpad = Scratchpad(self.token, data=response.json())
 
