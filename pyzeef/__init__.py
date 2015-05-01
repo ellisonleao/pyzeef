@@ -280,8 +280,8 @@ class Scratchpad(Base):
         return super(Scratchpad, self).__getattr__(item)
 
     def add_link(self, url):
-        url = '{}/addLink'.format(self.SCRATCHPAD_URL)
-        response = requests.post(url, data={'url': url},
+        api_url = '{}addLink'.format(self.SCRATCHPAD_URL)
+        response = requests.post(api_url, data={'url': url},
                                  headers=self.auth_header)
         if response.status_code == 200:
             # update links array
