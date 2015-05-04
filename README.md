@@ -7,24 +7,26 @@ Welcome to the Python Zeef API lib.
 
 - [Installing](#installing)
 - [Basic Usage](#basic-usage)
-- [The Zeef Class](#zeef)
-- [The Page Class](#page)
-- [The Block Class](#block)
-- [The Link Class](#link)
+- [The Zeef Class](#the-zeef-class)
+- [The Page Class](#the-page-class)
+- [The Block Class](#the-block-class)
+- [The Link Class](#the-link-class)
 
 
 ## Installing
 
 Using pip:
 
-	pip install pyzeef
+```
+pip install pyzeef
+```
 
 or cloning installing the current build
-
+```
 	git clone https://github.com/ellisonleao/pyzeef.git
 	cd pyzeef
 	python setup.py
-
+```
 I strong recommend using a virtualenv before installing any of the methods above.
 
 ## [Basic Usage](#basic-usage)
@@ -36,6 +38,7 @@ After generating your token:
 
 from pyzeef import Zeef
 
+```python
 	z = Zeef('YOUR-TOKEN')
 	print z.pages
 	# Output
@@ -43,8 +46,9 @@ from pyzeef import Zeef
 		<Page ID>,
 		...
 	]
+```
 
-### [The ZEEF Class](#zeef)
+### [The ZEEF Class](#zeef-class)
 
 ## `Zeef(token, persist_pages=True, get_scratchpad=True)`
 
@@ -98,7 +102,7 @@ This will output your ZEEF page in a markdown format.
 - `blocks` - A page can contain multiple blocks. When retrieving a page, the blocks property will return a list of [Block](#block) objects to help on block API operations.
 - `title` - Page's title.
 
-### [The Block Class](#block)
+### [The Block Class](#block-class)
 
 ### Methods
 
@@ -120,7 +124,7 @@ Deletes the block from the Page
 - `title` - Block's title
 - `type` - Block's type
 
-### [The Link Class](#link)
+### [The Link Class](#link-class)
 
 ### Methods
 
