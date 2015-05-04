@@ -36,3 +36,4 @@ htmlcov
 
 # MD files
 *.md
+!README.md
