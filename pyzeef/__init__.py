@@ -137,7 +137,7 @@ class Page(Base):
         # special cases
         if item == 'title':
             # get the default alias
-            subject = self.data['subject']['alias']
+            subject = self.data['subject']['aliases']
             for i in subject:
                 if i['defaultAlias']:
                     return i['displayName']
