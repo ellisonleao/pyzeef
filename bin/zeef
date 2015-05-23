@@ -49,13 +49,11 @@ def command_line():
         # show page summary
         total_blocks = len(page.blocks)
         total_links = sum([len(i.links) for i in page.blocks])
-        output = u"""
-        {} {}
-        {} {}
-        {} {}
-        """.format(color_text('TITLE - ', 'yellow'), page.title,
-                   color_text('TOTAL BLOCKS - ', 'yellow'), total_blocks,
-                   color_text('TOTAL LINKS - ', 'yellow'), total_links)
+        output = u"""{}: {}\n{}: {}\n{}: {}\n""".format(
+            color_text('TITLE', 'yellow'), page.title,
+            color_text('TOTAL BLOCKS', 'yellow'), total_blocks,
+            color_text('TOTAL LINKS', 'yellow'), total_links
+        )
         print output
 
     if args['pages']:
@@ -63,7 +61,7 @@ def command_line():
             return parser.print_help()
         d = Zeef(token, persist_pages=True)
         for page in d.pages:
-            print u'- {} - {}'.format(page.title, page.id)
+            print u'- {} (ID: {})'.format(color_text(page.title, 'green'), page.id)
 
     if args['markdown']:
         if not token:
@@ -78,13 +76,10 @@ def command_line():
 
     if args['scratchpad']:
         d = Zeef(token, get_scratchpad=True)
-        output = u"""
-        Your Scratchpad
-        Links:
-        """
+        output = u"""Your Scratchpad\nLinks:\n"""
         if d.scratchpad.links:
             for link in d.scratchpad.links:
-                output += u'\t{} - {}\n'.format(color_text(link['title'],
+                output += u'{:<} - {}\n'.format(color_text(link['title'],
                                                            'yellow'),
                                                 color_text(link['url'],
                                                            'green'))
