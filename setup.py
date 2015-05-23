@@ -8,8 +8,7 @@ except ImportError:
     from distutils.core import setup
 
 
-readme = open('README.rst').read()
-history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+readme = open('README.md').read()
 test_requirements = open('requirements-test.txt').read().split()
 
 requirements = [
@@ -22,7 +21,7 @@ setup(
     name='pyzeef',
     version='0.1.0',
     description='Python ZEEF API handler',
-    long_description=readme + '\n\n' + history,
+    long_description=readme + '\n\n',
     author='Ellison Leão',
     author_email='ellisonleao@gmail.com',
     url='https://github.com/ellisonleao/pyzeef',
