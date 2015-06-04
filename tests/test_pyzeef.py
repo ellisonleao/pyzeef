@@ -98,7 +98,7 @@ class TestZeef(unittest.TestCase):
                 'twitterURL': 'http://twitter.com/testuser'
             },
             'subject': {
-                'alias': [
+                'aliases': [
                     {
                         'defaultAlias': True,
                         'displayName': 'Test Page',
