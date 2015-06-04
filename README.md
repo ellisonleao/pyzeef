@@ -1,6 +1,9 @@
 pyzeef
 ======
 
+[![Code Health](https://landscape.io/github/ellisonleao/pyzeef/master/landscape.svg?style=flat)](https://landscape.io/github/ellisonleao/pyzeef/master)
+[![Build Status](https://travis-ci.org/ellisonleao/pyzeef.svg?branch=master)](https://travis-ci.org/ellisonleao/pyzeef)
+
 Welcome to the Python Zeef API lib.
 
 # Table of contents
