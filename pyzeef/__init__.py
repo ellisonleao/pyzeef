@@ -79,9 +79,6 @@ class Zeef(Base):
                         self.pages.append(Page(self.token, data=r.json()))
         return self._response(response)
 
-    """
-    Quick Methods
-    """
     def get_page(self, **kwargs):
         page_id = kwargs.get('page_id')
         alias = kwargs.get('alias')
