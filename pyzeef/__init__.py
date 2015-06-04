@@ -120,6 +120,23 @@ class Zeef(Base):
         else:
             return self._response(r)
 
+    def create_page(self, name, language='en', page_type='SUBJECT'):
+        page_type = page_type.upper()
+        types = ['SUBJECT', 'COMPANY', 'PERSONAL']
+        if page_type not in types:
+            raise ValueError('page_type should be SUBJECT, COMPANY or '
+                             'PERSONAL')
+        url = '{}/create'.format(Page.PAGE_URL)
+        data = {
+            'displayName': name,
+            'languageCode': language,
+            'type': page_type,
+        }
+        r = requests.post(url, data, headers=self.auth_header)
+        if r.status_code == 200:
+            return Page(self.token, data=r.json())
+        return self._response(r)
+
 
 class Page(Base):
     """

@@ -78,6 +78,10 @@ This will return a [Block](#block) class object, if any block is found with the 
 
 This will return a [Link](#link) class objects, if any link is found with the `link_id` provided.
 
+### `create_page(name, language='en', type=['SUBJECT', 'COMPANY', 'PERSONAL'])`
+
+Quick method to create a new page, given the name, language and the type. This will return a Page instance with the new page information.
+
 ### Main properties
 
 - `page` - This will return the fetched pages list, as [Page](#page) objects.
