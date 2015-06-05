@@ -2,7 +2,8 @@ include AUTHORS.rst
 include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
-include README.rst
+include README.md
+include requirements-test.txt
 include pyzeef/markdown_template.md
 
 recursive-include tests *

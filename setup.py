@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
 try:
     from setuptools import setup
 except ImportError:
@@ -19,7 +17,7 @@ requirements = [
 
 setup(
     name='pyzeef',
-    version='0.1.0',
+    version='0.1.2',
     description='Python ZEEF API handler',
     long_description=readme + '\n\n',
     author='Ellison Leão',
@@ -46,9 +44,6 @@ setup(
         "Programming Language :: Python :: 2",
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
     ],
     test_suite='tests',
     tests_require=test_requirements

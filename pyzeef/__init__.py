@@ -7,7 +7,7 @@ import requests
 
 __author__ = 'Ellison Leão'
 __email__ = 'ellisonleao@gmail.com'
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 
 __all__ = ['Zeef']
 
