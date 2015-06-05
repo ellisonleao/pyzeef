@@ -117,6 +117,17 @@ Updates the current block with given data dict. `data` keys can be:
 - `promoted` - Boolean
 - `publicly_visible` - Boolean
 
+For `link` type blocks, we can add:
+
+- `markdown_description` - String
+
+For `feed` type `blocks`, we can add:
+
+- `feed_url` - URL String
+- `max_links` - Integer
+- `refresh_minutes` - Integer
+
+
 ### `delete()`
 
 Deletes the block from the Page

@@ -245,6 +245,7 @@ class Block(Base):
         return super(Block, self).__getattr__(item)
 
     def update(self, data):
+        # TODO: Fields validation
         params = {}
         keys = ['title', 'promoted', 'publicly_visible']
         for key in keys:
@@ -256,6 +257,16 @@ class Block(Base):
 
         if self.type == 'link' and data.get('markdown_description', False):
             params['markdownDescription'] = data['markdown_description']
+
+        if self.type == 'feed':
+            if data.get('feed_url', False):
+                params['feedURL'] = data['feed_url']
+
+            if data.get('max_links', False):
+                params['maxLinks'] = data['max_links']
+
+            if data.get('refresh_minutes', False):
+                params['refreshIntervalMinutes'] = data['refresh_minutes']
 
         url = '{}/{}'.format(self.BLOCK_URL, self.id)
         response = requests.post(url, data=data, headers=self.auth_header)
