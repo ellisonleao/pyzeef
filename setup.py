@@ -17,7 +17,7 @@ requirements = [
 
 setup(
     name='pyzeef',
-    version='0.1.2',
+    version='0.1.3',
     description='Python ZEEF API handler',
     long_description=readme + '\n\n',
     author='Ellison Leão',
