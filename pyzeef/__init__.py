@@ -126,8 +126,7 @@ class Zeef(Base):
 
     def create_page(self, name, language='en', page_type='SUBJECT'):
         page_type = page_type.upper()
-        types = ['SUBJECT', 'COMPANY', 'PERSONAL']
-        if page_type not in types:
+        if page_type not in Page.PAGE_TYPES:
             raise ValueError('page_type should be SUBJECT, COMPANY or '
                              'PERSONAL')
         url = '{}/create'.format(Page.PAGE_URL)
@@ -147,6 +146,7 @@ class Page(Base):
     Class to handle Page API requests
     """
     PAGE_URL = '{}/page'.format(Base.API_URL)
+    PAGE_TYPES = ['SUBJECT', 'PERSONAL', 'COMPANY']
 
     def __repr__(self):
         return '<Page {}>'.format(self.id)
@@ -159,7 +159,6 @@ class Page(Base):
             for i in subject:
                 if i['defaultAlias']:
                     return i['displayName']
-
         if item == 'owner':
             return self.data['owner']['fullName']
         if item == 'blocks':
@@ -172,15 +171,38 @@ class Page(Base):
             if 'markdownDescription' in self.data:
                 return self.data['markdownDescription']
             return ''
+
+        if item == 'type':
+            if 'pageType' in self.data:
+                return self.data['pageType']
+
         return super(Page, self).__getattr__(item)
 
-    def update(self, data):
-        # TODO:
-        pass
+    def update(self, **kwargs):
+        if not self.id:
+            return
 
-    def delete(self):
-        # TODO:
-        pass
+        page_type = kwargs.get('type')
+        if page_type not in ['SUBJECT', 'COMPANY']:
+            raise ValueError('type must be SUBJECT or COMPANY')
+
+        description = kwargs.get('description')
+        data = {}
+        if page_type:
+            data['type'] = page_type
+        if description:
+            data['markdownDescription'] = description
+
+        if data:
+            url = '{}/{}'.format(self.PAGE_URL, self.id)
+            r = requests.post(url, data, headers=self.auth_header)
+            if r.status_code == 200:
+                content = r.json()
+                if description:
+                    self.data['markdownDescription'] = content['markdownDescription'] # flake8: noqa
+                if page_type:
+                    self.data['pageType'] = content['pageType']
+            return self._response(r)
 
     def to_markdown(self):
         template = Template(filename='pyzeef/markdown_template.md')

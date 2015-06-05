@@ -92,13 +92,9 @@ When fetching the pages, there is a helper class which can help you make Zeef Pa
 
 #### Methods
 
-#### `update()`
+#### `update(type=['SUBJECT', 'COMPANY'], description='your description')`
 
-TODO!
-
-#### `delete()`:
-
-TODO!
+Updates the current page. Both fields are optional.
 
 ### `to_markdown()`
 
