@@ -28,7 +28,7 @@ or cloning installing the current build
 ```
 	git clone https://github.com/ellisonleao/pyzeef.git
 	cd pyzeef
-	python setup.py
+	python setup.py develop
 ```
 I strong recommend using a virtualenv before installing any of the methods above.
 
