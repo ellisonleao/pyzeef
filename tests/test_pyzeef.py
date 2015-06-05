@@ -35,6 +35,10 @@ class TestZeef(unittest.TestCase):
         """
         responses.add(responses.GET, url=Scratchpad.SCRATCHPAD_URL, body=body)
 
+    def test_repr(self):
+        z = Zeef('token')
+        self.assertEqual(repr(z), '<Zeef token={}>'.format(z.token))
+
     @responses.activate
     def test_zeef_authentication_good_token(self):
         body = ('{"pageOverviews":[{"id":1,"url":"https://test.zeef.com'

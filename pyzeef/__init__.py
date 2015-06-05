@@ -44,6 +44,10 @@ class Zeef(Base):
     """
     Main ZEEF API Class
     """
+
+    def __repr__(self):
+        return '<Zeef token={}>'.format(self.token)
+
     def __getattr__(self, item):
         return object.__getattribute__(self, item)
 
