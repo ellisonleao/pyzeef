@@ -119,7 +119,7 @@ Updates the current block with given data dict. `data` keys can be:
 
 For `link` type blocks, we can add:
 
-- `markdown_description` - String
+- `description` - String
 
 For `feed` type `blocks`, we can add:
 

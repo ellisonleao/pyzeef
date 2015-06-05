@@ -240,7 +240,7 @@ class Block(Base):
             return links
         elif item == 'description':
             if self.type in ['link', 'feed']:
-                return self.data['markdownDescription']
+                return self.data.get('markdownDescription', '')
             return ''
         return super(Block, self).__getattr__(item)
 
@@ -255,8 +255,8 @@ class Block(Base):
         if self.type == 'text' and data.get('markdown_text', False):
             params['markdownText'] = data['markdown_text']
 
-        if self.type == 'link' and data.get('markdown_description', False):
-            params['markdownDescription'] = data['markdown_description']
+        if self.type == 'link' and data.get('description', False):
+            params['markdownDescription'] = data['description']
 
         if self.type == 'feed':
             if data.get('feed_url', False):
@@ -269,10 +269,10 @@ class Block(Base):
                 params['refreshIntervalMinutes'] = data['refresh_minutes']
 
         url = '{}/{}'.format(self.BLOCK_URL, self.id)
-        response = requests.post(url, data=data, headers=self.auth_header)
+        response = requests.post(url, data=params, headers=self.auth_header)
         if response.status_code == 200:
             for key, val in params.iteritems():
-                setattr(self, key, val)
+                self.data[key] = val
 
         return self._response(response)
 
