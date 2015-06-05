@@ -142,13 +142,9 @@ Deletes the block from the Page
 
 ### Methods
 
-### `update(data)`
+### `update(link='http://mylink.com', description='text', title='title')`
 
-Updates the current link with the provided data. `data` keys can be:
-
-- `url` - URL string
-- `title` - string
-- `description` - String
+Updates the current link with the provided kwargs.
 
 ### `delete()`
 

@@ -291,10 +291,10 @@ class Link(Base):
     def __repr__(self):
         return u'<Link {}>'.format(self.url)
 
-    def update(self, data):
-        url = data.get('url', False)
-        title = data.get('title', False)
-        description = data.get('description', False)
+    def update(self, **kwargs):
+        url = kwargs.get('url')
+        title = kwargs.get('title')
+        description = kwargs.get('description')
 
         params = {}
         if url:
