@@ -3,6 +3,7 @@ pyzeef
 
 [![Code Health](https://landscape.io/github/ellisonleao/pyzeef/master/landscape.svg?style=flat)](https://landscape.io/github/ellisonleao/pyzeef/master)
 [![Build Status](https://travis-ci.org/ellisonleao/pyzeef.svg?branch=master)](https://travis-ci.org/ellisonleao/pyzeef)
+[![PyPI](https://img.shields.io/pypi/dm/pyzeef.svg)](https://pypi.python.org/pypi/pyzeef/)
 
 Welcome to the Python Zeef API lib.
 
